@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Entry Form</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <h2>Enter Sales Data</h2>
+
+    <form id="salesForm">
+        <input type="text" name="shopName" placeholder="Shopkeeper Name" required><br>
+        <input type="text" name="shopAddress" placeholder="Shop Address" required><br>
+        <input type="text" name="contact" placeholder="Contact No." required><br>
+
+        <div id="productsContainer">
+            <div class="product">
+                <input type="text" name="productName[]" placeholder="Product Name" required>
+                <input type="number" name="price[]" placeholder="Price" required>
+                <input type="number" name="quantity[]" placeholder="Quantity" required>
+            </div>
+        </div>
+
+        <button type="button" onclick="addProduct()">Add Product</button><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script src="js/salesform.js"></script>
+</body>
+</html>
