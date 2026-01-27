@@ -13,6 +13,22 @@ if (display) {
   display.textContent = salesmanName;
 }
 
+function showLoader() {
+  document.getElementById("loadingOverlay").style.display = "flex";
+}
+
+function hideLoader() {
+  document.getElementById("loadingOverlay").style.display = "none";
+}
+
+function showSuccessModal() {
+  document.getElementById("successModal").style.display = "flex";
+}
+
+function closeSuccessModal() {
+  document.getElementById("successModal").style.display = "none";
+}
+
 // Function to add a new product row
 function addProduct() {
   const container = document.getElementById("productsContainer");
@@ -30,7 +46,14 @@ function addProduct() {
 document.getElementById("salesForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const form = e.target;
+  const submitBtn = form.querySelector("button[type='submit']");
 
+  // Prevent double submit
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  // Show loading popup
+  showLoader();
   // Collect all product data
   const productNames = form.querySelectorAll("input[name='productName[]']");
   const prices = form.querySelectorAll("input[name='price[]']");
@@ -73,8 +96,9 @@ document.getElementById("salesForm").addEventListener("submit", async (e) => {
     const result = await response.json();
 
     if (result.status === "success") {
-      alert("Sales data submitted!");
-
+      // alert("Sales data submitted!");
+      hideLoader();
+      showSuccessModal();
       // Reset form
       form.reset();
       document.getElementById("productsContainer").innerHTML = `
@@ -85,11 +109,27 @@ document.getElementById("salesForm").addEventListener("submit", async (e) => {
         </div>
       `;
     } else {
+      hideLoader();
       alert("Error submitting data: " + result.message);
     }
   } catch (err) {
+    hideLoader();
     alert("Error submitting data. Try again.");
     console.error(err);
   }
+  
+  // Re-enable submit button
+  submitBtn.disabled = false;
+  submitBtn.textContent = "✅ Submit Sales";
 });
+
+
+// function showToast() {
+//   const toast = document.getElementById("toast");
+//   toast.classList.add("show");
+
+//   setTimeout(() => {
+//     toast.classList.remove("show");
+//   }, 2500);
+// }
 

@@ -1,26 +1,240 @@
-body {
-  font-family: Arial, sans-serif;
-  max-width: 500px;
-  margin: 20px auto;
-}
-
-input {
-  display: block;
-  margin: 10px 0;
-  padding: 8px;
-  width: 100%;
+/* Reset & base */
+* {
   box-sizing: border-box;
 }
 
-button {
-  padding: 10px 20px;
-  margin: 5px 0;
-  cursor: pointer;
+body {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: #f4f6f9;
+  margin: 0;
+  padding: 20px;
+  color: #333;
 }
 
+/* Page container */
+.container {
+  max-width: 420px;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Headings */
+h1, h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* Inputs */
+input, select, textarea {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #007bff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+button:hover {
+  background: #0056cc;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Secondary button (logout / reset) */
+button.secondary {
+  background: #6c757d;
+}
+
+button.secondary:hover {
+  background: #565e64;
+}
+
+/* Product card */
 .product {
-  border: 1px solid #ddd;
-  padding: 10px;
+  background: #f9fafb;
+  border: 1px solid #e3e6ea;
+  padding: 16px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+}
+
+/* Labels */
+label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 10px;
+  display: block;
+}
+
+/* Small helper text */
+.small-text {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Mobile tweaks */
+@media (max-width: 480px) {
+  .container {
+    margin: 20px 10px;
+    padding: 20px;
+  }
+}
+
+/* ---------- TOAST ----------
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #28a745;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-10px);
+} */
+
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loader-box {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  text-align: center;
+  width: 260px;
+}
+
+.loader-box p {
+  margin-top: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Spinner Animation */
+.spinner {
+  width: 45px;
+  height: 45px;
+  border: 5px solid #ddd;
+  border-top: 5px solid #4CAF50;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Success Modal Overlay */
+.success-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+/* Success Box */
+.success-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  width: 280px;
+  animation: popIn 0.3s ease;
+}
+
+.success-icon {
+  font-size: 42px;
   margin-bottom: 10px;
 }
 
+.success-box h3 {
+  margin: 10px 0 5px;
+}
+
+.success-box p {
+  font-size: 14px;
+  color: #555;
+}
+
+.success-box button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  background: #4CAF50;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+/* Small animation */
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
