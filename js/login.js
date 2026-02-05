@@ -1,7 +1,7 @@
 const users = [
   { username: "user1", password: "user1", name: "User 1" },
   { username: "user2", password: "user2", name: "User 2" },
-  { username: "user3", password: "user3", name: "User 3" }
+  { username: "sunil", password: "sunil", name: "Sunil M" }
 ];
 
 function login() {
