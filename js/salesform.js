@@ -48,80 +48,110 @@ document.getElementById("salesForm").addEventListener("submit", async (e) => {
   const form = e.target;
   const submitBtn = form.querySelector("button[type='submit']");
 
-  // Prevent double submit
   submitBtn.disabled = true;
-  submitBtn.textContent = "Submitting...";
+  submitBtn.textContent = "Getting Location...";
 
-  // Show loading popup
   showLoader();
-  // Collect all product data
-  const productNames = form.querySelectorAll("input[name='productName[]']");
-  const prices = form.querySelectorAll("input[name='price[]']");
-  const quantities = form.querySelectorAll("input[name='quantity[]']");
 
-  const products = [];
-  for (let i = 0; i < productNames.length; i++) {
-    products.push({
-      name: productNames[i].value,
-      price: prices[i].value,
-      quantity: quantities[i].value
-    });
-  }
-
-  // Build the data object to send
-  const data = {
-    salesman: salesmanName,
-    shopName: form.shopName.value,
-    shopAddress: form.shopAddress.value,
-    contact: form.contact.value,
-    date: new Date().toLocaleDateString(),
-    time: new Date().toLocaleTimeString(),
-    products: products
-  };
-
-  console.log("Submitting sales data:", data);
-
-  try {
-    const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbxb7ZP7bZt8lRlsRBCdAY3ahZ8qcC26pIwlc_DH0YwvjL1F_S05K08Jzcg2P6eF9ObE/exec",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify(data)
-      }
-    );
-
-    const result = await response.json();
-
-    if (result.status === "success") {
-      // alert("Sales data submitted!");
-      hideLoader();
-      showSuccessModal();
-      // Reset form
-      form.reset();
-      document.getElementById("productsContainer").innerHTML = `
-        <div class="product">
-          <input type="text" name="productName[]" placeholder="Product Name" required>
-          <input type="number" name="price[]" placeholder="Price" required>
-          <input type="number" name="quantity[]" placeholder="Quantity" required>
-        </div>
-      `;
-    } else {
-      hideLoader();
-      alert("Error submitting data: " + result.message);
-    }
-  } catch (err) {
+  // 🚀 Step 1: Get Location First
+  if (!navigator.geolocation) {
     hideLoader();
-    alert("Error submitting data. Try again.");
-    console.error(err);
+    alert("Geolocation is not supported by this device.");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "✅ Submit Sales";
+    return;
   }
-  
-  // Re-enable submit button
-  submitBtn.disabled = false;
-  submitBtn.textContent = "✅ Submit Sales";
+
+  navigator.geolocation.getCurrentPosition(async (position) => {
+
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    submitBtn.textContent = "Submitting...";
+
+    // 🚀 Step 2: Collect Products
+    const productNames = form.querySelectorAll("input[name='productName[]']");
+    const prices = form.querySelectorAll("input[name='price[]']");
+    const quantities = form.querySelectorAll("input[name='quantity[]']");
+
+    const products = [];
+    for (let i = 0; i < productNames.length; i++) {
+      products.push({
+        name: productNames[i].value,
+        price: prices[i].value,
+        quantity: quantities[i].value
+      });
+    }
+
+    // 🚀 Step 3: Build Data Object (NOW includes location)
+    const data = {
+      salesman: salesmanName,
+      shopName: form.shopName.value,
+      shopAddress: form.shopAddress.value,
+      contact: form.contact.value,
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+      latitude: latitude,
+      longitude: longitude,
+      products: products
+    };
+
+    console.log("Submitting sales data with location:", data);
+
+    try {
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbxb7ZP7bZt8lRlsRBCdAY3ahZ8qcC26pIwlc_DH0YwvjL1F_S05K08Jzcg2P6eF9ObE/exec",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(data)
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.status === "success") {
+        hideLoader();
+        showSuccessModal();
+
+        form.reset();
+        document.getElementById("productsContainer").innerHTML = `
+          <div class="product">
+            <input type="text" name="productName[]" placeholder="Product Name" required>
+            <input type="number" name="price[]" placeholder="Price" required>
+            <input type="number" name="quantity[]" placeholder="Quantity" required>
+          </div>
+        `;
+      } else {
+        hideLoader();
+        alert("Error submitting data: " + result.message);
+      }
+
+    } catch (err) {
+      hideLoader();
+      alert("Error submitting data. Try again.");
+      console.error(err);
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "✅ Submit Sales";
+
+  }, (error) => {
+    hideLoader();
+    alert("Location permission is required to submit the form.");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "✅ Submit Sales";
+  },
+  {
+    enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 0
+  });
+
 });
+
 
 
 // function showToast() {
