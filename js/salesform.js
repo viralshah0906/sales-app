@@ -140,7 +140,10 @@ document.getElementById("salesForm").addEventListener("submit", async (e) => {
 
   }, (error) => {
     hideLoader();
-    alert("Location permission is required to submit the form.");
+    alert("Location Error Code: " + error.code + 
+        "\nMessage: " + error.message);
+
+    console.log("Location full error:", error);
     submitBtn.disabled = false;
     submitBtn.textContent = "✅ Submit Sales";
   },
